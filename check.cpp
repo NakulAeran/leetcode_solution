@@ -1,145 +1,79 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-/*
- * @lc app=leetcode id=460 lang=cpp
- *
- * [460] LFU Cache
- */
-
-// @lc code=start
-
-class Node
-{
-public:
-    int key;
-    int val;
-    int freq;
-    Node *prev;
-    Node *next;
-    Node(int k, int v)
-    {
-        key = k;
-        val = v;
-        freq = 1;
-        prev = NULL;
-        next = NULL;
-    }
-};
-
-class LFUCache
-{
-private:
-    int capacity;
-    Node *head;
-    Node *tail;
-    unordered_map<int, Node *> cache;
-    map<int, Node *> freq;
-
-public:
-    LFUCache(int capacity)
-    {
-        this->capacity = capacity;
-        head = new Node(-1, -1);
-        head->freq = INT_MAX;
-        freq[INT_MAX] = head;
-        tail = new Node(-1, -1);
-        head->next = tail;
-        tail->prev = head;
-    }
-
-    void addNode(Node *curr)
-    {
-        auto temp = freq.upper_bound(curr->freq);
-        curr->prev = temp->second;
-        curr->next = temp->second->next;
-        temp->second->next = curr;
-        curr->next->prev = curr;
-    }
-
-    void deleteNode(Node *delnode)
-    {
-        Node *delprev = delnode->prev;
-        Node *delnext = delnode->next;
-        delprev->next = delnext;
-        delnext->prev = delprev;
-    }
-
-    int get(int key)
-    {
-        if (cache.find(key) != cache.end())
-        {
-            Node *delNode = cache[key];
-            if (freq[delNode->freq] == delNode)
-            {
-                freq.erase(delNode->freq);
-                if (delNode->prev->freq == delNode->freq)
-                {
-                    freq[delNode->prev->freq] = delNode->prev;
-                }
+bool check(vector<vector<int>> &grid, vector<vector<int>> &distToTheif, int safeDist){
+    int n = grid.size();
+    queue<pair<int, int>> q;
+    if (distToTheif[0][0] < safeDist)
+        return false;
+    q.push({0, 0});
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    visited[0][0] = true;
+    while (!q.empty()){
+        int currRow = q.front().first, currCol = q.front().second;
+        q.pop();
+        if (currRow == n - 1 && currCol == n - 1)
+            return true;
+        for (int dirIdx = 0; dirIdx < 4; dirIdx++){
+            int newRow = currRow + rowDir[dirIdx];
+            int newCol = currCol + colDir[dirIdx];
+            if (isValid(visited, newRow, newCol)){
+                if (distToTheif[newRow][newCol] < safeDist)
+                    continue;
+                visited[newRow][newCol] = true;
+                q.push({newRow, newCol});
             }
-            deleteNode(delNode);
-            delNode->freq++;
-            addNode(delNode);
-            freq[delNode->freq] = delNode;
-            return delNode->val;
         }
-        return -1;
     }
-
-    void put(int key, int value)
-    {
-        if (cache.find(key) != cache.end())
-        {
-            Node *delNode = cache[key];
-            if (freq[delNode->freq] == delNode)
-            {
-                freq.erase(delNode->freq);
-                if (delNode->prev->freq == delNode->freq)
-                {
-                    freq[delNode->prev->freq] = delNode->prev;
-                }
-            }
-            deleteNode(delNode);
-            delNode->freq++;
-            delNode->val = value;
-            addNode(delNode);
-            freq[delNode->freq] = delNode;
-            return;
-        }
-        if (cache.size() == capacity)
-        {
-            Node *delNode = tail->prev;
-            cache.erase(delNode->key);
-            if (freq[delNode->freq] == delNode)
-            {
-                freq.erase(delNode->freq);
-                if (delNode->prev->freq == delNode->freq)
-                {
-                    freq[delNode->prev->freq] = delNode->prev;
-                }
-            }
-            deleteNode(delNode);
-        }
-        Node *newNode = new Node(key, value);
-        cache[key] = newNode;
-        addNode(newNode);
-        freq[newNode->freq] = newNode;
-    }
-};
-
+    return false;
+}
 
 int main(){
-    LFUCache s(2);
-    s.put(1,1);
-    s.put(2,2);
-    cout<<s.get(1)<<endl;
-    s.put(3,3);
-    cout<<s.get(2)<<endl;
-    cout<<s.get(3)<<endl;
-    s.put(4,4);
-    cout<<s.get(1)<<endl;
-    cout<<s.get(3)<<endl;
-    cout<<s.get(4)<<endl;
-    return 0;
+    int n;
+    cin>>n;
+    vector<vector<int>> grid(n,vector<int>(n));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>grid[i][j];
+        }
+    }
+    vector<vector<int>> distToTheif(n, vector<int>(n, -1));
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    queue<pair<int, int>> q;
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+                if (grid[i][j] == 1){
+                    q.push({i, j});
+                    distToTheif[i][j] = 0;
+                    // visited[i][j] = true;
+                }
+            }
+        }
+    int del[] = {-1, 0, 1, 0, -1};
+    while (!q.empty()){
+        int i = q.front().first;
+        int j = q.front().second;
+        q.pop();
+        if (visited[i][j])
+            continue;
+        visited[i][j] = true;
+        for (int k = 0; k < 4; k++){
+            int nx = i + del[k];
+            int ny = j + del[k + 1];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < n && !visited[nx][ny] && grid[nx][ny] != 1){
+                distToTheif[nx][ny] = distToTheif[i][j] + 1;
+                q.push({nx, ny});
+            }
+        }
+    }
+    int lo = 0, hi = n + 1;
+    while (lo < hi){
+        int mid = lo + (hi - lo) / 2;
+        if (check(grid, distToTheif, mid))
+            lo = mid + 1;
+        else
+            hi = mid;
+    }
+    return lo - 1;
+
 }
