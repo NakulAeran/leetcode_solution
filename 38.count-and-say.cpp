@@ -1,6 +1,3 @@
-#include<bits/stdc++.h>
-using namespace std;
-
 class Solution {
 private : 
 
@@ -30,10 +27,3 @@ public:
         return ans;
     }
 };
-
-int main(){
-    int n;
-    cin>>n;
-    Solution s;
-    cout<<s.countAndSay(n)<<endl;
-}
