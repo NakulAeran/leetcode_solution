@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "leetcode_solution",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"vector": "cpp",
+			"string": "cpp",
+			"deque": "cpp"
+		}
+	}
+}
