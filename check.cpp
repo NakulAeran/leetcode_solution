@@ -1,39 +1,29 @@
-#include<bits/stdc++.h>
-using namespace std;
 
-class Solution {
-private : 
 
-string convert(int count, int prev){
-    string temp = to_string(count);
-    temp.push_back(prev+'0');
-    return temp;
-}
-
+class Solution
+{
 public:
-    string countAndSay(int n) {
-        if(n==1)return "1";
-        string s = countAndSay(n-1);
-        string ans;
-        int m = s.size();
-        int prev = s[0]-'0';
-        int count = 1;
-        for(int i=1;i<m;i++){
-            if(s[i]-'0'==prev)count++;
-            else{
-                ans.append(convert(count, prev));
-                prev = s[i] - '0';
-                count = 1;
-            }
+    long long maximumSum(vector<int> &nums)
+    {
+
+        int n = 1000;                     // Calculate squares from 1 to 10^3
+        vector<long long> squares(n + 1); // Using a vector to store the squares
+        for (int i = 1; i <= n; ++i)
+        {
+            squares[i] = i*i;
         }
-        ans.append(convert(count, prev));
+        int nu = nums.size();
+        long long ans = 0;
+        for (int i = 1; i <= nu; i++)
+        {
+            long long sum = 0;
+            for(int j=1;j<n;j++){
+                if(i*squares[j]>nu) break;
+                sum += nums[i*squares[j]-1];
+            }
+            ans = max(sum,ans);
+        }
+
         return ans;
     }
 };
-
-int main(){
-    int n;
-    cin>>n;
-    Solution s;
-    cout<<s.countAndSay(n)<<endl;
-}

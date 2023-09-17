@@ -10,6 +10,14 @@
         "string_view": "cpp",
         "span": "cpp",
         "*.tcc": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "tuple": "cpp",
+        "compare": "cpp",
+        "unordered_map": "cpp",
+        "initializer_list": "cpp",
+        "ranges": "cpp",
+        "regex": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp"
     }
 }
