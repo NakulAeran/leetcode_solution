@@ -1,29 +1,51 @@
-
-
 class Solution
 {
 public:
-    long long maximumSum(vector<int> &nums)
+    int minOperations(vector<int> &nums, int target)
     {
-
-        int n = 1000;                     // Calculate squares from 1 to 10^3
-        vector<long long> squares(n + 1); // Using a vector to store the squares
-        for (int i = 1; i <= n; ++i)
+        int n = nums.size();
+        long long sum = 0;
+        for (int temp : nums)
+            sum += temp;
+        if (sum < target)
+            return -1;
+        sort(nums.begin(), nums.end());
+        sum = 0;
+        vector<int> arr;
+        int i = 0;
+        while (sum < target)
         {
-            squares[i] = i*i;
+            arr.push_back(nums[i]);
+            sum += nums[i++];
         }
-        int nu = nums.size();
-        long long ans = 0;
-        for (int i = 1; i <= nu; i++)
+        int ans = 0;
+        for (int i = arr.size() - 1; i >= 0; i--)
         {
-            long long sum = 0;
-            for(int j=1;j<n;j++){
-                if(i*squares[j]>nu) break;
-                sum += nums[i*squares[j]-1];
+            if (target >= arr[i])
+            {
+                target -= arr[i];
+                arr.pop_back();
             }
-            ans = max(sum,ans);
+            else
+            {
+                long long temp_sum = 0;
+                for (int j = 0; j < i; j++)
+                    temp_sum += arr[j];
+                if (temp_sum >= target)
+                {
+                    arr.pop_back();
+                }
+                else
+                {
+                    arr[i] = arr[i] / 2;
+                    if(arr[i]<=target)target -= arr[i];
+                    i++;
+                    ans++;
+                }
+            }
+            if (target == 0)
+                break;
         }
-
         return ans;
     }
 };
