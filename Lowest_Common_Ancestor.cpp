@@ -1,18 +1,48 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-template<int n> struct funStruct
+class String
 {
-	enum { val = 2*funStruct<n-1>::val };
-};
+private:
+    char *str;
+    int len;
 
-template<> struct funStruct<0>
-{
-	enum { val = 1 };
+public:
+    String() 
+    {
+        str = new char[1];
+        str[0] = '\0';
+        len = 0;
+    }
+    String(const char s[])
+    {
+        int n = strlen(s);
+        str = new char[n + 1];
+        strcpy(str, s);
+        len = n;
+    }
+    String(String &s)
+    {
+        str = new char[s.len];
+        strcpy(str, s.str);
+        len = s.len;
+    }
+    void print()
+    {
+        cout << str << endl;
+        cout << len << endl;
+    }
 };
 
 int main()
 {
-	cout << funStruct<8>::val << endl;
-	return 0;
+    // default constructor
+    String s;
+    // parametrized cons
+    String s2 = "Hello";
+    // copy cons
+    String s3 = s2;
+    s.print();
+    s2.print();
+    s3.print();
 }
