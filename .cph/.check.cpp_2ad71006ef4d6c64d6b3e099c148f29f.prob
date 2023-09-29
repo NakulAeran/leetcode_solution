@@ -1,1 +1,1 @@
-{"name":"Local: check","url":"/home/nakul/vscode/leetcode/leetcode_solution/check.cpp","tests":[{"id":1694622415000,"input":"3\n2\n4\n5","output":"-1\n3 4 1 2\n4 5 1 2 3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/nakul/vscode/leetcode/leetcode_solution/check.cpp","group":"local","local":true}
+{"name":"Local: check","url":"/home/nakul/vscode/leetcode/leetcode_solution/check.cpp","tests":[],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/nakul/vscode/leetcode/leetcode_solution/check.cpp","group":"local","local":true}
